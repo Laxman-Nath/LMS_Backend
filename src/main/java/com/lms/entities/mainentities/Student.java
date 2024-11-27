@@ -38,4 +38,5 @@ public class Student {
    private  List<Book> borrowedBooks;
    @OneToOne
    private Role role;
+   private boolean isEnable;
 }

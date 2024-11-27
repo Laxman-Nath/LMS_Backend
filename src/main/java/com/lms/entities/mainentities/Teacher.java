@@ -35,4 +35,5 @@ public class Teacher {
 	private List<Book> borrowedBooks=new ArrayList<>() ;
 	@OneToOne
 	private Role role;
+	private boolean isEnable;
 }

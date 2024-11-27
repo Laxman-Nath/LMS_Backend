@@ -1,0 +1,52 @@
+package com.lms.controllers;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.lms.constants.Paths;
+import com.lms.dtos.AddBookRequest;
+import com.lms.message.SuccessMessage;
+import com.lms.services.Book.BookService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+
+@Slf4j
+@RestController
+@RequiredArgsConstructor
+public class BookController {
+	private final BookService bookService;
+
+	@PostMapping(Paths.LIBRARIAN_ADD_BOOK)
+	public SuccessMessage addBook(@RequestBody AddBookRequest book) {
+		log.info("ISBN {}", book.getISBN());
+		return bookService.addBook(book);
+	}
+
+	@DeleteMapping(Paths.DELETE_BOOK)
+	public SuccessMessage deleteBook(@RequestParam Long bookId) {
+		return bookService.deleteBook(bookId);
+	}
+
+	@PutMapping(Paths.LIBRARIAN_UPDATE_BOOK)
+	public SuccessMessage updateBook(@RequestBody AddBookRequest book, @RequestParam Long bookId) {
+		return bookService.updateBook(bookId, book);
+	}
+
+	@GetMapping(Paths.LIBRARIAN_VIEW_ALL_BOOKS)
+	public List<AddBookRequest> getAllBooks() {
+		return bookService.getAllBoooks();
+	}
+
+	@GetMapping(Paths.LIBRARIAN_VIEW_BOOK_BY_ID)
+	public AddBookRequest getBookById(@RequestParam Long bookId) {
+		return this.bookService.getBookById(bookId);
+	}
+
+}
