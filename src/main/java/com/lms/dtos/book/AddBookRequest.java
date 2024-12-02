@@ -1,4 +1,4 @@
-package com.lms.dtos;
+package com.lms.dtos.book;
 
 import java.time.LocalDate;
 
@@ -13,4 +13,6 @@ public class AddBookRequest {
 	private String authorName;
 	private String ISBN;
 	private LocalDate publishedDate;
+	private String password;
+	private String confirmPassword;
 }

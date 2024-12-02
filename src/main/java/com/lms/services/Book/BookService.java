@@ -1,7 +1,8 @@
 package com.lms.services.Book;
 
-import com.lms.dtos.AddBookRequest;
 import java.util.List;
+
+import com.lms.dtos.book.AddBookRequest;
 import com.lms.message.SuccessMessage;
 
 public interface BookService {

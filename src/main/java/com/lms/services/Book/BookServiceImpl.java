@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import com.lms.dtos.AddBookRequest;
+import com.lms.dtos.book.AddBookRequest;
 import com.lms.entities.mainentities.Book;
 import com.lms.exceptions.CustomException;
 import com.lms.message.SuccessMessage;

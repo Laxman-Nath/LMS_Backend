@@ -20,13 +20,16 @@ public class Librarian {
 @Id
 @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private String name;
+	
 	private LocalDate addedDate;
 	private LocalDate updatedDate;
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String address;
+	private String gender;
 	@OneToOne
 	private Role role;
+	private String password;
+	private String confirmPassword;
 }
