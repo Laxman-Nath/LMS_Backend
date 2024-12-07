@@ -3,6 +3,7 @@ package com.lms.constants;
 public class Paths {
 	public static final String BASE_URL = "/lms";
 	public static final String LIBRARIAN = "/librarian";
+	public static final String USER="/user";
 	// book
 
 	public static final String ADD_BOOK = BASE_URL + LIBRARIAN + "/addbook";
@@ -37,4 +38,12 @@ public class Paths {
 
 	// login
 	public static final String LOGIN = BASE_URL + "/login";
+	
+	// borrow or return book
+	public static final String BORROW_BOOK=BASE_URL+USER+"/borrowbook";
+	public static final String RETURN_BOOK=BASE_URL+USER+"/returnbook";
+	
+	// get authenticated user
+	public static final String GET_AUTHENTICATED_USER=BASE_URL+"/getauthenticateduser";
+	
 }

@@ -12,9 +12,11 @@ import com.lms.dtos.student.AddStudentRequest;
 import com.lms.dtos.teacher.AddTeacherRequest;
 import com.lms.entities.mainentities.Student;
 import com.lms.entities.mainentities.Teacher;
+import com.lms.entities.supportingentities.Role;
 import com.lms.exceptions.CustomException;
 import com.lms.message.SuccessMessage;
 import com.lms.repositories.TeacherRepository;
+import com.lms.services.role.RoleService;
 
 import lombok.AllArgsConstructor;
 
@@ -24,11 +26,14 @@ public class TeacherServiceImpl implements TeacherService {
 	private final TeacherRepository teacherRepository;
 	private final ModelMapper modelMapper;
 	private final PasswordEncoder passwordEncoder;
+	private final RoleService roleService;
 
 	@Override
 	public SuccessMessage addTeacher(AddTeacherRequest teacher) {
 		Teacher t = modelMapper.map(teacher, Teacher.class);
+		Role role=roleService.getRoleById(3l);
 		t.setPassword(passwordEncoder.encode(t.getPassword()));
+		t.setRole(role);
 		t.setIsEnable(true);
 		t.setAddedDate(LocalDate.now());
 		this.teacherRepository.save(t);
@@ -92,7 +97,7 @@ public class TeacherServiceImpl implements TeacherService {
 
 	@Override
 	public Teacher findByEmail(String email) {
-		// TODO Auto-generated method stub
+		
 		return this.teacherRepository.findByEmail(email).orElse(null);
 	}
 

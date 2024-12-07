@@ -39,7 +39,7 @@ public class LibrarianServiceImpl implements LibrarianService {
 		if (role == null) {
 			throw new CustomException("RS001", "Something went wrong on server!");
 		}
-		librarian2.setPassword(librarian2.getPassword());
+		librarian2.setPassword(passwordEncoder.encode(librarian2.getPassword()));
 		librarian2.setAddedDate(LocalDate.now());
 		librarian2.setRole(role);
 		this.librarianRepo.save(librarian2);

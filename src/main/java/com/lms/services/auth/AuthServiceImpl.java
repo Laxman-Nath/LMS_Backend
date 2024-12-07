@@ -1,13 +1,22 @@
 package com.lms.services.auth;
 
 import java.nio.file.AccessDeniedException;
+import java.util.Optional;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.lms.auth.AuthenticationHandler;
+import com.lms.dtos.auth.AuthenticationSuccessUser;
 import com.lms.dtos.login.LoginRequest;
+import com.lms.entities.mainentities.Librarian;
+import com.lms.entities.mainentities.Student;
+import com.lms.entities.mainentities.Teacher;
+import com.lms.exceptions.CustomException;
 import com.lms.message.AuthenticationSuccessMessage;
+import com.lms.repositories.LibrarianRepo;
+import com.lms.repositories.StudentRepository;
+import com.lms.repositories.TeacherRepository;
 import com.lms.services.Token.TokenService;
 
 import lombok.RequiredArgsConstructor;
@@ -20,6 +29,9 @@ public class AuthServiceImpl implements AuthService {
 
 	private final AuthenticationHandler authenticationHandler;
 	private final TokenService tokenService;
+	private final TeacherRepository teacherRepository;
+	private final StudentRepository studentRepository;
+	private final LibrarianRepo librarianRepository;
 
 	@Override
 	public AuthenticationSuccessMessage handleLogin(LoginRequest loginRequest) throws AccessDeniedException {
@@ -32,6 +44,39 @@ public class AuthServiceImpl implements AuthService {
 		}
 		String token = tokenService.generateToken(authentication);
 		return new AuthenticationSuccessMessage("You have successfully logged in", token);
+	}
+
+	@Override
+	public AuthenticationSuccessUser getAuthenticatedUser() {
+		String emailString = authenticationHandler.getAuthenticatedUserName();
+		if (emailString == null) {
+			throw new CustomException("AS001", "No user is authenticated till now!");
+		}
+		AuthenticationSuccessUser authUser = new AuthenticationSuccessUser();
+		Optional<Librarian> librarian = librarianRepository.findByEmail(emailString);
+		Optional<Student> student = studentRepository.findByEmail(emailString);
+		Optional<Teacher> teacher = teacherRepository.findByEmail(emailString);
+
+		if (librarian.isPresent()) {
+			authUser.setFirstName(librarian.get().getFirstName());
+			authUser.setLastName(librarian.get().getLastName());
+			authUser.setGender(librarian.get().getGender());
+			authUser.setRoleName(librarian.get().getRole().getName());
+		} else if (student.isPresent()) {
+			authUser.setFirstName(student.get().getFirstName());
+			authUser.setLastName(student.get().getLastName());
+			authUser.setGender(student.get().getGender());
+			authUser.setRoleName(student.get().getRole().getName());
+		} else if (teacher.isPresent()) {
+			authUser.setFirstName(teacher.get().getFirstName());
+			authUser.setLastName(teacher.get().getLastName());
+			authUser.setGender(teacher.get().getGender());
+			authUser.setRoleName(teacher.get().getRole().getName());
+		} else {
+			throw new CustomException("AS002", "No user found with this email!");
+		}
+		return authUser;
+
 	}
 
 }

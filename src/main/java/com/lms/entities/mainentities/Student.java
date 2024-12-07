@@ -1,12 +1,14 @@
 package com.lms.entities.mainentities;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.validator.constraints.UniqueElements;
 
 import com.lms.entities.supportingentities.Role;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +22,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table
-public class Student {
+public class Student  {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -40,11 +42,14 @@ public class Student {
 	private Department department;
 	private String year;
 	private String semester;
-	@OneToMany
-	private List<Book> borrowedBooks;
+
 	@OneToOne
 	private Role role;
 	private String password;
 	private String confirmPassword;
+    private Double fineAmount; 
+
+	@OneToMany(mappedBy = "student",cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<BorrowedBook> borrowedBooks=new ArrayList<>();
 
 }

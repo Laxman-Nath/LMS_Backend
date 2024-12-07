@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lms.constants.Paths;
+import com.lms.dtos.auth.AuthenticationSuccessUser;
 import com.lms.dtos.login.LoginRequest;
 import com.lms.message.AuthenticationSuccessMessage;
 import com.lms.services.auth.AuthService;
@@ -27,4 +28,10 @@ public class AuthController {
 		log.info("Password {}", loginRequest.getPassword());
 		return authService.handleLogin(loginRequest);
 	}
+
+	@GetMapping(Paths.GET_AUTHENTICATED_USER)
+	public AuthenticationSuccessUser getAuthenticatedUser() {
+		return this.authService.getAuthenticatedUser();
+	}
+
 }

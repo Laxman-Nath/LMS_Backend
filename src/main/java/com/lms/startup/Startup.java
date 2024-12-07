@@ -46,5 +46,25 @@
 //			role.setAuthorities(authorityRepository.findAll());
 //			roleRepository.save(role);
 //		}
+		
+//		List<String> authorityNames = Arrays.asList( "BORROW_BOOK","RETURN_BOOK");
+//
+//		authorityNames.forEach(authorityName -> {
+//			Authority authority = new Authority();
+//			authority.setName(authorityName);
+//			authority.setAddedDate(currentDate);
+//			authorityRepository.save(authority);
+//		});
+//		String [] roleNameStrings= {"ROLE_TEACHER","ROLE_STUDENT"};
+
+//		if (roleRepository.count() == 0) {
+//		for(String r:roleNameStrings) {
+//			Role role = new Role();
+//			role.setName(r);
+//			role.setAuthorities(authorityRepository.findAll());
+//			role.setAddedDate(currentDate);
+//			roleRepository.save(role);
+//		}
+//		}
 //	}
 //}

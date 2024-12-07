@@ -52,6 +52,7 @@ public class SecurityConfig {
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		return http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth -> auth
 				.requestMatchers("/lms/login").permitAll().requestMatchers("/lms/librarian/**").hasRole("LIBRARIAN")
+				.requestMatchers("/lms/user/**").hasAnyRole("STUDENT","TEACHER")
 //				.requestMatchers("/lms/librarian/addbook").hasAuthority("ADD_BOOK")  // Authority check
 //                .requestMatchers("/lms/librarian/deletebook").hasAuthority("DELETE_BOOK")
 //                .requestMatchers("/lms/librarian/getallbooks").hasAuthority("GET_ALL_BOOKS")

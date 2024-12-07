@@ -16,7 +16,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table
-public class Librarian {
+public class Librarian implements User{
 @Id
 @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;

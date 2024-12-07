@@ -11,9 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.lms.dtos.student.AddStudentRequest;
 import com.lms.entities.mainentities.Student;
+import com.lms.entities.supportingentities.Role;
 import com.lms.exceptions.CustomException;
 import com.lms.message.SuccessMessage;
+import com.lms.repositories.RoleRepository;
 import com.lms.repositories.StudentRepository;
+import com.lms.services.role.RoleService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,13 +26,16 @@ public class StudentServiceimpl implements StudentService {
 	private final StudentRepository studentRepository;
 	private final ModelMapper modelMapper;
 	private final PasswordEncoder passwordEncoder;
+	private final RoleService roleService;
 
 	@Override
 	public SuccessMessage addStudent(AddStudentRequest student) {
+		Role role=this.roleService.getRoleById(4l);
 		if (studentRepository.findByRollNo(student.getRollNo()) != null) {
 			throw new CustomException("AS001", "Customer with this roll no already exists!");
 		}
 		Student s = modelMapper.map(student, Student.class);
+		s.setRole(role);
 		s.setPassword(passwordEncoder.encode(s.getPassword()));
 		s.setIsEnable(true);
 		s.setAddedDate(LocalDate.now());

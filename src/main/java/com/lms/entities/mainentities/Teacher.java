@@ -6,10 +6,6 @@ import java.util.List;
 
 import com.lms.entities.supportingentities.Role;
 
-
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,7 +14,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name="teacher_table")
-public class Teacher {
+public class Teacher{
 	@Id  
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -34,11 +30,12 @@ public class Teacher {
 	private LocalDate joinedDate;
 	@OneToOne
 	private Department department;
-	@OneToMany(mappedBy = "teacher")
-	private List<Book> borrowedBooks=new ArrayList<>() ;
+	private Double fineAmount; 
 	@OneToOne
 	private Role role;
 	private String password;
 	private String confirmPassword;
+	@OneToMany(mappedBy = "teacher",cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<BorrowedBook> borrowedBooks=new ArrayList<>();
 	
 }
