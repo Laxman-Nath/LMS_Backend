@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.lms.dtos.book.AddBookRequest;
 import com.lms.dtos.student.AddStudentRequest;
 import com.lms.dtos.teacher.AddTeacherRequest;
 import com.lms.entities.mainentities.Student;
@@ -15,8 +18,11 @@ import com.lms.entities.mainentities.Teacher;
 import com.lms.entities.supportingentities.Role;
 import com.lms.exceptions.CustomException;
 import com.lms.message.SuccessMessage;
+import com.lms.pagination.Pagination;
+import com.lms.pagination.PaginationUtil;
 import com.lms.repositories.TeacherRepository;
 import com.lms.services.role.RoleService;
+import com.lms.utils.PageableData;
 
 import lombok.AllArgsConstructor;
 
@@ -31,7 +37,7 @@ public class TeacherServiceImpl implements TeacherService {
 	@Override
 	public SuccessMessage addTeacher(AddTeacherRequest teacher) {
 		Teacher t = modelMapper.map(teacher, Teacher.class);
-		Role role=roleService.getRoleById(3l);
+		Role role = roleService.getRoleById(3l);
 		t.setPassword(passwordEncoder.encode(t.getPassword()));
 		t.setRole(role);
 		t.setIsEnable(true);
@@ -80,12 +86,12 @@ public class TeacherServiceImpl implements TeacherService {
 	}
 
 	@Override
-	public List<AddTeacherRequest> getAllTeachers() {
-		List<Teacher> teachers = teacherRepository.findAll();
-		if (teachers == null) {
-			throw new CustomException("TS003", "There are no teachers!");
-		}
-		return teachers.stream().map((s) -> modelMapper.map(s, AddTeacherRequest.class)).collect(Collectors.toList());
+	public PageableData<List<AddTeacherRequest>> getAllTeachers(Pagination pagination) {
+		Pageable pageable = PaginationUtil.performPagination(pagination);
+		Page<AddTeacherRequest> teachersPage = this.teacherRepository.getAllTeachers(pageable);
+
+		return new PageableData<>(teachersPage.getContent(), teachersPage.getTotalPages(),  teachersPage.getTotalElements(),
+				pagination.getPageNo());
 	}
 
 	@Override
@@ -97,7 +103,7 @@ public class TeacherServiceImpl implements TeacherService {
 
 	@Override
 	public Teacher findByEmail(String email) {
-		
+
 		return this.teacherRepository.findByEmail(email).orElse(null);
 	}
 

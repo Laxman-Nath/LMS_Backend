@@ -16,6 +16,7 @@ import com.nimbusds.jose.proc.SecurityContext;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,6 +42,10 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+// Interface for providing CORS configuration
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -50,17 +55,21 @@ public class SecurityConfig {
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		return http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth -> auth
-				.requestMatchers("/lms/login").permitAll().requestMatchers("/lms/librarian/**").hasRole("LIBRARIAN")
-				.requestMatchers("/lms/user/**").hasAnyRole("STUDENT","TEACHER")
+		return http.csrf(AbstractHttpConfigurer::disable)
+				.authorizeHttpRequests(
+						auth -> auth.requestMatchers("/lms/login").permitAll().requestMatchers("/lms/librarian/**")
+								.hasRole("LIBRARIAN").requestMatchers("/lms/user/**").hasAnyRole("STUDENT", "TEACHER")
+
 //				.requestMatchers("/lms/librarian/addbook").hasAuthority("ADD_BOOK")  // Authority check
 //                .requestMatchers("/lms/librarian/deletebook").hasAuthority("DELETE_BOOK")
 //                .requestMatchers("/lms/librarian/getallbooks").hasAuthority("GET_ALL_BOOKS")
-				.anyRequest().authenticated()
+								.anyRequest().authenticated()
 
-		).httpBasic(AbstractHttpConfigurer::disable)
+				).cors(cors -> cors.configurationSource(corsConfigurationSource()))
+				.httpBasic(AbstractHttpConfigurer::disable)
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless
-				 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
+				.oauth2ResourceServer(
+						oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
 				.oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(Customizer.withDefaults())) // JWT
 																													// support
 				.exceptionHandling(ex -> ex.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint()) // Handle
@@ -82,27 +91,42 @@ public class SecurityConfig {
 		JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
 		return new NimbusJwtEncoder(jwks);
 	}
-	
+
 	@Bean
-	 JwtAuthenticationConverter jwtAuthenticationConverter() {
-	    JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
-	    converter.setJwtGrantedAuthoritiesConverter(jwt -> {
-	        List<GrantedAuthority> authorities = new ArrayList<>();
-	        List<String> roles = jwt.getClaimAsStringList("roles");  // roles claim
-	        if (roles != null) {
-	            authorities.addAll(roles.stream()
-	                .map(role -> new SimpleGrantedAuthority(role))
-	                .collect(Collectors.toList()));
-	        }
-	        List<String> scopes = jwt.getClaimAsStringList("scopes"); // scopes or permissions claim
-	        if (scopes != null) {
-	            authorities.addAll(scopes.stream()
-	                .map(scope -> new SimpleGrantedAuthority(scope))
-	                .collect(Collectors.toList()));
-	        }
-	        return authorities;
-	    });
-	    return converter;
+	JwtAuthenticationConverter jwtAuthenticationConverter() {
+		JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+		converter.setJwtGrantedAuthoritiesConverter(jwt -> {
+			List<GrantedAuthority> authorities = new ArrayList<>();
+			List<String> roles = jwt.getClaimAsStringList("roles"); // roles claim
+			if (roles != null) {
+				authorities.addAll(
+						roles.stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList()));
+			}
+			List<String> scopes = jwt.getClaimAsStringList("scopes"); // scopes or permissions claim
+			if (scopes != null) {
+				authorities.addAll(
+						scopes.stream().map(scope -> new SimpleGrantedAuthority(scope)).collect(Collectors.toList()));
+			}
+			return authorities;
+		});
+		return converter;
+	}
+
+	@Bean // Marks this method as a bean definition
+	CorsConfigurationSource corsConfigurationSource() { // Defines CORS configuration
+		CorsConfiguration configuration = new CorsConfiguration(); // Creates a new CORS configuration object
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // Specifies allowed origins for CORS
+		configuration.setAllowCredentials(true); // Allows credentials (like cookies) to be included in requests
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Specifies allowed
+																									// HTTP methods
+		configuration.setAllowedHeaders(Arrays.asList("*")); // Allows all headers in CORS requests
+		configuration.setExposedHeaders(Arrays.asList("Authorization")); // Exposes the Authorization header to the
+																			// client
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource(); // Creates a source for
+																						// URL-based CORS configuration
+		source.registerCorsConfiguration("/**", configuration); // Registers the CORS configuration for all endpoints
+		return source; // Returns the CORS configuration source
 	}
 
 }

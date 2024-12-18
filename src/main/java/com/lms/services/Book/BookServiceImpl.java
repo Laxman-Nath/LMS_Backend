@@ -2,16 +2,20 @@ package com.lms.services.Book;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.lms.dtos.book.AddBookRequest;
 import com.lms.entities.mainentities.Book;
 import com.lms.exceptions.CustomException;
 import com.lms.message.SuccessMessage;
+import com.lms.pagination.Pagination;
+import com.lms.pagination.PaginationUtil;
 import com.lms.repositories.BookRepository;
+import com.lms.utils.PageableData;
 
 import lombok.RequiredArgsConstructor;
 
@@ -59,18 +63,19 @@ public class BookServiceImpl implements BookService {
 		if (oldBook.getISBN() != null) {
 			newBook.setISBN(oldBook.getISBN());
 		}
-		
+
 		newBook.setUpdatedDate(LocalDate.now());
 		this.bookRepository.save(newBook);
 		return new SuccessMessage("Book with " + bookId + " is updated successfully");
 	}
 
 	@Override
-	public List<AddBookRequest> getAllBoooks() {
-		List<Book> books = this.bookRepository.findAll();
-		List<AddBookRequest> addBookRequests = books.stream().map(b -> modelMapper.map(b, AddBookRequest.class))
-				.collect(Collectors.toList());
-		return addBookRequests;
+	public PageableData<List<AddBookRequest>> getAllBooks(Pagination pagination) {
+		Pageable pageable = PaginationUtil.performPagination(pagination);
+		Page<AddBookRequest> booksPage = this.bookRepository.getAllBooks(pageable);
+
+		return new PageableData<>(booksPage.getContent(), booksPage.getTotalPages(),  booksPage.getTotalElements(),
+				pagination.getPageNo());
 	}
 
 	@Override

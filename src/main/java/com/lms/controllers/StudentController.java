@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lms.constants.Paths;
 import com.lms.dtos.student.AddStudentRequest;
 import com.lms.message.SuccessMessage;
+import com.lms.pagination.Pagination;
 import com.lms.services.student.StudentService;
+import com.lms.utils.PageableData;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +38,8 @@ public class StudentController {
 	}
 
 	@GetMapping(Paths.VIEW_ALL_STUDENTS)
-	public List<AddStudentRequest> getAllStudents() {
-		return this.studentService.getAllStudents();
+	public PageableData<List<AddStudentRequest>> getAllStudents(@RequestBody Pagination pagination) {
+		return this.studentService.getAllStudents(pagination);
 	}
 
 	@DeleteMapping(Paths.DELETE_STUDENT)

@@ -5,6 +5,8 @@ import java.util.List;
 import com.lms.dtos.student.AddStudentRequest;
 import com.lms.entities.mainentities.Student;
 import com.lms.message.SuccessMessage;
+import com.lms.pagination.Pagination;
+import com.lms.utils.PageableData;
 
 public interface StudentService {
 	SuccessMessage addStudent(AddStudentRequest student);
@@ -13,7 +15,7 @@ public interface StudentService {
 
 	SuccessMessage updateStudent(Long studentId, AddStudentRequest student);
 
-	List<AddStudentRequest> getAllStudents();
+	PageableData<List<AddStudentRequest>> getAllStudents(Pagination pagination);
 
 	AddStudentRequest getStudentById(Long studentId);
 	

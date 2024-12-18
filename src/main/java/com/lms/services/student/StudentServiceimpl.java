@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +15,12 @@ import com.lms.entities.mainentities.Student;
 import com.lms.entities.supportingentities.Role;
 import com.lms.exceptions.CustomException;
 import com.lms.message.SuccessMessage;
+import com.lms.pagination.Pagination;
+import com.lms.pagination.PaginationUtil;
 import com.lms.repositories.RoleRepository;
 import com.lms.repositories.StudentRepository;
 import com.lms.services.role.RoleService;
+import com.lms.utils.PageableData;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,7 +34,7 @@ public class StudentServiceimpl implements StudentService {
 
 	@Override
 	public SuccessMessage addStudent(AddStudentRequest student) {
-		Role role=this.roleService.getRoleById(4l);
+		Role role = this.roleService.getRoleById(4l);
 		if (studentRepository.findByRollNo(student.getRollNo()) != null) {
 			throw new CustomException("AS001", "Customer with this roll no already exists!");
 		}
@@ -87,12 +91,11 @@ public class StudentServiceimpl implements StudentService {
 	}
 
 	@Override
-	public List<AddStudentRequest> getAllStudents() {
-		List<Student> students = studentRepository.findAll();
-		if (students == null) {
-			return null;
-		}
-		return students.stream().map((s) -> modelMapper.map(s, AddStudentRequest.class)).collect(Collectors.toList());
+	public PageableData<List<AddStudentRequest>> getAllStudents(Pagination pagination) {
+		Page<AddStudentRequest> studentsPage = this.studentRepository
+				.getAllStudents(PaginationUtil.performPagination(pagination));
+		return new PageableData<>(studentsPage.getContent(), studentsPage.getTotalPages(),
+				studentsPage.getTotalElements(), pagination.getPageNo());
 	}
 
 	@Override

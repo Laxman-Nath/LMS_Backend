@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lms.constants.Paths;
 import com.lms.dtos.book.AddBookRequest;
 import com.lms.message.SuccessMessage;
+import com.lms.pagination.Pagination;
 import com.lms.services.Book.BookService;
+import com.lms.utils.PageableData;
 import com.nimbusds.jose.Header;
 
 import lombok.RequiredArgsConstructor;
@@ -42,9 +44,9 @@ public class BookController {
 	}
 
 	@GetMapping(Paths.VIEW_ALL_BOOKS)
-	public List<AddBookRequest> getAllBooks(@RequestHeader("Authorization") String token) {
-		log.info("inside book token: {}",token);
-		return bookService.getAllBoooks();
+	public PageableData<List<AddBookRequest>> getAllBooks(@RequestBody Pagination pagination) {
+		
+		return bookService.getAllBooks(pagination);
 	}
 
 	@GetMapping(Paths.VIEW_BOOK_BY_ID)

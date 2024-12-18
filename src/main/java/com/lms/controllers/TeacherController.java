@@ -14,7 +14,9 @@ import com.lms.constants.Paths;
 import com.lms.dtos.student.AddStudentRequest;
 import com.lms.dtos.teacher.AddTeacherRequest;
 import com.lms.message.SuccessMessage;
+import com.lms.pagination.Pagination;
 import com.lms.services.teacher.TeacherService;
+import com.lms.utils.PageableData;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,8 +37,8 @@ public class TeacherController {
 	}
 
 	@GetMapping(Paths.VIEW_ALL_TEACHERS)
-	public List<AddTeacherRequest> getAllTeachers() {
-		return this.teacherService.getAllTeachers();
+	public PageableData<List<AddTeacherRequest>> getAllTeachers(@RequestBody Pagination pagination) {
+		return this.teacherService.getAllTeachers(pagination);
 	}
 
 	@DeleteMapping(Paths.DELETE_TEACHER)

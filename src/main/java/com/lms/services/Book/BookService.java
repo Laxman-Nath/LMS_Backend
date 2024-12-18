@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.lms.dtos.book.AddBookRequest;
 import com.lms.message.SuccessMessage;
+import com.lms.pagination.Pagination;
+import com.lms.utils.PageableData;
 
 public interface BookService {
 
@@ -13,7 +15,7 @@ public interface BookService {
 
 	SuccessMessage updateBook(Long bookId, AddBookRequest book);
 
-	List<AddBookRequest> getAllBoooks();
+	PageableData<List<AddBookRequest>> getAllBooks(Pagination pagination);
 
 	AddBookRequest getBookById(Long bookId);
 }
