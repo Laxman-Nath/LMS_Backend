@@ -9,10 +9,12 @@ import com.lms.constants.Paths;
 import com.lms.message.SuccessMessage;
 import com.lms.services.borrowedbook.BorrowedBookService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name="UserAPI",description = "API for managing crud operations related to users")
 public class UserController {
 	private final BorrowedBookService borrowedBookService;
 

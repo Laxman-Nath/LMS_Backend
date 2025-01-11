@@ -17,12 +17,14 @@ import com.lms.pagination.Pagination;
 import com.lms.services.student.StudentService;
 import com.lms.utils.PageableData;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@Tag(name="StudentAPI",description = "API for managing crud operations related to students")
 public class StudentController {
 	private final StudentService studentService;
 

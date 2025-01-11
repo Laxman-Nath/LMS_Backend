@@ -13,12 +13,14 @@ import com.lms.dtos.login.LoginRequest;
 import com.lms.message.AuthenticationSuccessMessage;
 import com.lms.services.auth.AuthService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+@Tag(name="AuthAPI",description = "Api for managing authentications")
 public class AuthController {
 	private final AuthService authService;
 

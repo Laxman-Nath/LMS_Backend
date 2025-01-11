@@ -18,10 +18,12 @@ import com.lms.pagination.Pagination;
 import com.lms.services.teacher.TeacherService;
 import com.lms.utils.PageableData;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name="TeacherAPI",description = "API for managing crud operations related to teacher")
 public class TeacherController {
 	private final TeacherService teacherService;
 

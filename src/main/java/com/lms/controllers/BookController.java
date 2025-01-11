@@ -17,6 +17,7 @@ import com.lms.services.Book.BookService;
 import com.lms.utils.PageableData;
 import com.nimbusds.jose.Header;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@Tag(name="BookAPI",description = "API for managing crud operations related to book")
 public class BookController {
 	private final BookService bookService;
 
@@ -44,8 +46,8 @@ public class BookController {
 	}
 
 	@GetMapping(Paths.VIEW_ALL_BOOKS)
-	public PageableData<List<AddBookRequest>> getAllBooks(@RequestBody Pagination pagination) {
-		
+	public PageableData<List<AddBookRequest>> getAllBooks( Pagination pagination) {
+		System.out.println("Paginaiton"+pagination);
 		return bookService.getAllBooks(pagination);
 	}
 

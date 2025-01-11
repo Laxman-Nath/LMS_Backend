@@ -17,10 +17,12 @@ import com.lms.message.SuccessMessage;
 import com.lms.services.department.DepartmentService;
 import com.lms.services.teacher.TeacherService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name="DepartmentAPI",description = "API for managing crud operations related to department")
 public class DepartmentController {
 	private final DepartmentService deptService;
 
