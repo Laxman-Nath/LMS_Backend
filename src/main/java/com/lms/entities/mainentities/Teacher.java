@@ -27,6 +27,7 @@ public class Teacher{
 	private Boolean isEnable;
 	private String gender;
 	private String address;
+	private String profileImage;
 	private LocalDate joinedDate;
 	@OneToOne
 	private Department department;

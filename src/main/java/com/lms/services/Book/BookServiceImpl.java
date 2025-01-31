@@ -63,6 +63,9 @@ public class BookServiceImpl implements BookService {
 		if (oldBook.getISBN() != null) {
 			newBook.setISBN(oldBook.getISBN());
 		}
+		if(oldBook.getBookImage()!=null) {
+			newBook.setBookImage(oldBook.getBookImage());
+		}
 
 		newBook.setUpdatedDate(LocalDate.now());
 		this.bookRepository.save(newBook);
@@ -71,9 +74,11 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public PageableData<List<AddBookRequest>> getAllBooks(Pagination pagination) {
+//	public List<AddBookRequest> getAllBooks(Pagination pagination) {
 		Pageable pageable = PaginationUtil.performPagination(pagination);
 		Page<AddBookRequest> booksPage = this.bookRepository.getAllBooks(pageable);
 
+//		return booksPage.toList();
 		return new PageableData<>(booksPage.getContent(), booksPage.getTotalPages(),  booksPage.getTotalElements(),
 				pagination.getPageNo());
 	}

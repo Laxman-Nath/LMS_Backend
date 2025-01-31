@@ -18,6 +18,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 	Student findByRollNo(@Param("rollNo") Long rollNo);
 	@Query("SELECT l FROM Student l WHERE l.email=:email")
 	Optional<Student> findByEmail(@Param("email") String email);
-	@Query("SELECT new com.lms.dtos.student.AddStudentRequest(s.firstName,s.lastName,s.email,s.address,s.gender,s.joinedDate,s.rollNo,s.year,s.semester) FROM Student s")
+	@Query("SELECT new com.lms.dtos.student.AddStudentRequest(s.firstName,s.lastName,s.email,s.address,s.gender,s.joinedDate,s.rollNo,s.year,s.semester,s.profileImage) FROM Student s")
 	Page<AddStudentRequest> getAllStudents(Pageable pageable);
 }

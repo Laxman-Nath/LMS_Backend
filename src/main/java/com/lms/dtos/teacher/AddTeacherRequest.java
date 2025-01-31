@@ -17,8 +17,8 @@ public class AddTeacherRequest extends UpdateTeacherRequest{
 	private String password;
 	private String confirmPassword;
 	
-	public AddTeacherRequest(String firstName,String lastName,String email,String address,String gender,LocalDate joinedDate) {
-		super(firstName, lastName, email, address, gender,joinedDate);
+	public AddTeacherRequest(String firstName,String lastName,String email,String address,String gender,LocalDate joinedDate,String profileImage) {
+		super(firstName, lastName, email, address, gender,joinedDate,profileImage);
 	}
 	
 }

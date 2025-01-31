@@ -17,8 +17,8 @@ public class AddStudentRequest extends UpdateStudentRequest{
 	private String confirmPassword;
 	
 	public AddStudentRequest(String firstName, String lastName, String email, String address, String gender,
-			LocalDate joinedDate, Long rollNo, String year, String semester) {
-		super(firstName, lastName, email, address, gender,joinedDate,rollNo,year,semester);
+			LocalDate joinedDate, Long rollNo, String year, String semester,String profileImage) {
+		super(firstName, lastName, email, address, gender,joinedDate,rollNo,year,semester,profileImage);
 		
 	}
 //	private Boolean isEnable;

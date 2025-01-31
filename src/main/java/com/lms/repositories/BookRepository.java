@@ -9,6 +9,6 @@ import com.lms.dtos.book.AddBookRequest;
 import com.lms.entities.mainentities.Book;
 
 public interface BookRepository extends JpaRepository<Book, Long>{
-@Query("SELECT new com.lms.dtos.book.AddBookRequest(b.id,b.title,b.quantity,b.authorName,b.ISBN,b.publishedDate) FROM Book b  ")	
+@Query("SELECT new com.lms.dtos.book.AddBookRequest(b.id,b.title,b.quantity,b.authorName,b.ISBN,b.publishedDate,b.bookImage) FROM Book b  ")	
 Page<AddBookRequest> getAllBooks(Pageable pageable);
 }

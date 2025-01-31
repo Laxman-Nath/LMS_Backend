@@ -15,6 +15,6 @@ public interface TeacherRepository extends JpaRepository<Teacher, Long> {
 	@Query("SELECT l FROM Teacher l WHERE l.email=:email")
 	Optional<Teacher> findByEmail(@Param("email") String email);
 	
-	@Query("SELECT new com.lms.dtos.teacher.AddTeacherRequest(t.firstName,t.lastName,t.email,t.address,t.gender,t.joinedDate) FROM Teacher t")
+	@Query("SELECT new com.lms.dtos.teacher.AddTeacherRequest(t.firstName,t.lastName,t.email,t.address,t.gender,t.joinedDate,t.profileImage) FROM Teacher t")
 	Page<AddTeacherRequest> getAllTeachers(Pageable pageable);
 }

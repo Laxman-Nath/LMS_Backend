@@ -16,7 +16,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table
-public class Librarian implements User{
+public class Librarian{
 @Id
 @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -32,4 +32,5 @@ public class Librarian implements User{
 	private Role role;
 	private String password;
 	private String confirmPassword;
+	private String profileImage;
 }

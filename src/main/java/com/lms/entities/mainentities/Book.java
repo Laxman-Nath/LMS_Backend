@@ -31,6 +31,7 @@ public class Book {
 	private String authorName;
 	private String ISBN;
 	private LocalDate publishedDate;
+	private String bookImage;
 //	@ManyToOne
 //	@JoinColumn(name = "teacher_id")
 //	private Teacher teacher;
@@ -38,6 +39,6 @@ public class Book {
 //	@JoinColumn(name = "student_id")
 //	private Student student;
 	@OneToMany(mappedBy = "book")
-	private List<BorrowedBook> borrowedBooks=new ArrayList<>();
+	private List<BorrowedBook> borrowedBooks = new ArrayList<>();
 
 }
