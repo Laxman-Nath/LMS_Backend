@@ -1,8 +1,10 @@
 package com.lms.entities.mainentities;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,17 +22,23 @@ public class Book {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private String name;
+	private String title;
 	private LocalDate addedDate;
 	private LocalDate updatedDate;
-	@OneToMany(mappedBy = "book")
-	private List<Author> authors;
+	private Integer quantity;
+//	@OneToMany(mappedBy = "book")
+//	private List<Author> authors;
+	private String authorName;
 	private String ISBN;
 	private LocalDate publishedDate;
-	@ManyToOne
-	@JoinColumn(name = "teacher_id")
-	private Teacher teacher;
-	@ManyToOne
-	@JoinColumn(name = "student_id")
-	private Student student;
+	private String bookImage;
+//	@ManyToOne
+//	@JoinColumn(name = "teacher_id")
+//	private Teacher teacher;
+//	@ManyToOne
+//	@JoinColumn(name = "student_id")
+//	private Student student;
+	@OneToMany(mappedBy = "book")
+	private List<BorrowedBook> borrowedBooks = new ArrayList<>();
+
 }

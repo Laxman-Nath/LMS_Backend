@@ -1,41 +1,60 @@
 package com.lms.entities.mainentities;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.hibernate.annotations.ManyToAny;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import com.lms.entities.supportingentities.Role;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
-
-
 @Data
 @Entity
 @Table
-public class Student {
+public class Student  {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private String name;
+	@Column(unique = true)
+	private Long rollNo;
+
 	private LocalDate addedDate;
 	private LocalDate updatedDate;
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String address;
-   @OneToOne
-   private Department department;
-   private String year;
-   private String semester;
-   @OneToMany
-   private  List<Book> borrowedBooks;
-   @OneToOne
-   private Role role;
+	private Boolean isEnable;
+	private String gender;
+	private LocalDate joinedDate;
+	@ManyToOne
+	@JoinColumn(name = "dept_id")
+	private Department department;
+	private String year;
+	private String semester;
+	private String profileImage;
+
+	@OneToOne
+	private Role role;
+	private String password;
+	private String confirmPassword;
+    private Double fineAmount; 
+
+	@OneToMany(mappedBy = "student",cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<BorrowedBook> borrowedBooks=new ArrayList<>();
+
 }
