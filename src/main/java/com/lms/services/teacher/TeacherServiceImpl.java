@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.lms.dtos.book.AddBookRequest;
 import com.lms.dtos.student.AddStudentRequest;
 import com.lms.dtos.teacher.AddTeacherRequest;
+import com.lms.entities.mainentities.Department;
 import com.lms.entities.mainentities.Student;
 import com.lms.entities.mainentities.Teacher;
 import com.lms.entities.supportingentities.Role;
@@ -21,6 +22,7 @@ import com.lms.message.SuccessMessage;
 import com.lms.pagination.Pagination;
 import com.lms.pagination.PaginationUtil;
 import com.lms.repositories.TeacherRepository;
+import com.lms.services.department.DepartmentService;
 import com.lms.services.role.RoleService;
 import com.lms.utils.PageableData;
 
@@ -33,11 +35,14 @@ public class TeacherServiceImpl implements TeacherService {
 	private final ModelMapper modelMapper;
 	private final PasswordEncoder passwordEncoder;
 	private final RoleService roleService;
+	private final DepartmentService departmentService;
 
 	@Override
 	public SuccessMessage addTeacher(AddTeacherRequest teacher) {
 		Teacher t = modelMapper.map(teacher, Teacher.class);
 		Role role = roleService.getRoleById(3l);
+		Department department=departmentService.findByDepartmentName(teacher.getDepartmentName());
+		t.setDepartment(department);
 		t.setPassword(passwordEncoder.encode(t.getPassword()));
 		t.setRole(role);
 		t.setIsEnable(true);
@@ -78,6 +83,9 @@ public class TeacherServiceImpl implements TeacherService {
 		}
 		if (teacher.getGender() != null) {
 			t.setGender(teacher.getGender());
+		}
+		if(teacher.getProfileImage()!=null) {
+			t.setProfileImage(teacher.getProfileImage());
 		}
 		t.setUpdatedDate(LocalDate.now());
 		this.teacherRepository.save(t);

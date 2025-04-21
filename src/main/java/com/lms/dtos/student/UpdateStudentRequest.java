@@ -17,8 +17,8 @@ public class UpdateStudentRequest extends BaseClass {
 	private String semester;
 
 	public UpdateStudentRequest(String firstName, String lastName, String email, String address, String gender,
-			LocalDate joinedDate, Long rollNo, String year, String semester,String profileImage) {
-		super(firstName, lastName, email, address, gender,profileImage);
+			LocalDate joinedDate, Long rollNo, String year, String semester,String profileImage,String departmentName) {
+		super(firstName, lastName, email, address, gender,profileImage,departmentName);
 		this.joinedDate = joinedDate;
 		this.rollNo = rollNo;
 		this.year = year;

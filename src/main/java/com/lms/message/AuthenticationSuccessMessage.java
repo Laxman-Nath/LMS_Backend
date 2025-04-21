@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 public class AuthenticationSuccessMessage {
 	private String message;
 	private String token;
+	private String roleName;
 	
 }

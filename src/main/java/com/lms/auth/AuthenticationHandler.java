@@ -22,6 +22,7 @@ public class AuthenticationHandler {
 		log.info("Inside authentication handler............");
 		authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 		return authentication;
 	}
 	

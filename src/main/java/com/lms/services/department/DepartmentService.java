@@ -4,7 +4,10 @@ import java.util.List;
 
 import com.lms.dtos.dept.AddDepartmentRequest;
 import com.lms.dtos.teacher.AddTeacherRequest;
+import com.lms.entities.mainentities.Department;
 import com.lms.message.SuccessMessage;
+import com.lms.pagination.Pagination;
+import com.lms.utils.PageableData;
 
 public interface DepartmentService {
 	SuccessMessage addDepartment(AddDepartmentRequest dept);
@@ -13,7 +16,9 @@ public interface DepartmentService {
 
 	SuccessMessage updateDepartment(Long deptId, AddDepartmentRequest Dept);
 
-	List<AddDepartmentRequest> getAllDepartments();
+	PageableData<List<AddDepartmentRequest>> getAllDepartments(Pagination pagination);
 
 	AddDepartmentRequest getDepartmentById(Long deptId);
+
+	Department findByDepartmentName(String name);
 }

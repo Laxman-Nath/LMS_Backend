@@ -14,13 +14,16 @@ public class BaseClass {
 	private String address;
 	private String gender;
 	private String profileImage;
+	private String departmentName;
 
-	public BaseClass(String firstName, String lastName, String email, String address, String gender,String profileImage) {
+	public BaseClass(String firstName, String lastName, String email, String address, String gender,String profileImage
+			,String departmentName) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.address = address;
 		this.gender = gender;
 		this.profileImage=profileImage;
+		this.departmentName=departmentName;
 	}
 }

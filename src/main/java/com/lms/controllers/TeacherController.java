@@ -39,7 +39,7 @@ public class TeacherController {
 	}
 
 	@GetMapping(Paths.VIEW_ALL_TEACHERS)
-	public PageableData<List<AddTeacherRequest>> getAllTeachers(@RequestBody Pagination pagination) {
+	public PageableData<List<AddTeacherRequest>> getAllTeachers( Pagination pagination) {
 		return this.teacherService.getAllTeachers(pagination);
 	}
 

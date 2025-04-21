@@ -14,8 +14,8 @@ public class UpdateTeacherRequest extends BaseClass {
 	private Boolean isEnable;
 
 	private LocalDate joinedDate;
-	public UpdateTeacherRequest(String firstName,String lastName,String email,String address,String gender,LocalDate joinedDate,String profileImage) {
-		super(firstName,lastName,email,address,gender,profileImage);
+	public UpdateTeacherRequest(String firstName,String lastName,String email,String address,String gender,LocalDate joinedDate,String profileImage,String departmentName) {
+		super(firstName,lastName,email,address,gender,profileImage, departmentName);
 		this.joinedDate=joinedDate;
 	}
 }

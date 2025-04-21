@@ -40,7 +40,9 @@ public class StudentController {
 	}
 
 	@GetMapping(Paths.VIEW_ALL_STUDENTS)
-	public PageableData<List<AddStudentRequest>> getAllStudents(@RequestBody Pagination pagination) {
+	public PageableData<List<AddStudentRequest>> getAllStudents(Pagination pagination) {
+		System.out.println("inside get all students");
+		log.info("inside get all students");
 		return this.studentService.getAllStudents(pagination);
 	}
 

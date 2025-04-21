@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.lms.dtos.student.AddStudentRequest;
+import com.lms.entities.mainentities.Department;
 import com.lms.entities.mainentities.Student;
 import com.lms.entities.supportingentities.Role;
 import com.lms.exceptions.CustomException;
@@ -19,6 +20,7 @@ import com.lms.pagination.Pagination;
 import com.lms.pagination.PaginationUtil;
 import com.lms.repositories.RoleRepository;
 import com.lms.repositories.StudentRepository;
+import com.lms.services.department.DepartmentService;
 import com.lms.services.role.RoleService;
 import com.lms.utils.PageableData;
 
@@ -31,6 +33,7 @@ public class StudentServiceimpl implements StudentService {
 	private final ModelMapper modelMapper;
 	private final PasswordEncoder passwordEncoder;
 	private final RoleService roleService;
+	private final DepartmentService departmentService;
 
 	@Override
 	public SuccessMessage addStudent(AddStudentRequest student) {
@@ -39,6 +42,8 @@ public class StudentServiceimpl implements StudentService {
 			throw new CustomException("AS001", "Customer with this roll no already exists!");
 		}
 		Student s = modelMapper.map(student, Student.class);
+		Department department=departmentService.findByDepartmentName(student.getDepartmentName());
+		s.setDepartment(department);
 		s.setRole(role);
 		s.setPassword(passwordEncoder.encode(s.getPassword()));
 		s.setIsEnable(true);
@@ -84,6 +89,9 @@ public class StudentServiceimpl implements StudentService {
 		}
 		if (student.getGender() != null) {
 			s.setGender(student.getGender());
+		}
+		if(student.getProfileImage()!=null) {
+			s.setProfileImage(student.getProfileImage());
 		}
 		s.setUpdatedDate(LocalDate.now());
 		this.studentRepository.save(s);

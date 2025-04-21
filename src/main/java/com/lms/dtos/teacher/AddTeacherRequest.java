@@ -16,9 +16,10 @@ public class AddTeacherRequest extends UpdateTeacherRequest{
 	
 	private String password;
 	private String confirmPassword;
-	
-	public AddTeacherRequest(String firstName,String lastName,String email,String address,String gender,LocalDate joinedDate,String profileImage) {
-		super(firstName, lastName, email, address, gender,joinedDate,profileImage);
+	private Long id;
+	public AddTeacherRequest(Long id,String firstName,String lastName,String email,String address,String gender,LocalDate joinedDate,String profileImage,String departmentName) {
+		super(firstName, lastName, email, address, gender,joinedDate,profileImage, departmentName);
+		this.id=id;
 	}
 	
 }

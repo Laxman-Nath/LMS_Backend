@@ -41,14 +41,16 @@ public class Student  {
 	private Boolean isEnable;
 	private String gender;
 	private LocalDate joinedDate;
+	private String departmentName;
 	@ManyToOne
-	@JoinColumn(name = "dept_id")
+//	@JoinColumn(name = "dept_id")
 	private Department department;
 	private String year;
 	private String semester;
 	private String profileImage;
 
-	@OneToOne
+	@ManyToOne
+	@JoinColumn(name = "role_id", nullable = false) 
 	private Role role;
 	private String password;
 	private String confirmPassword;

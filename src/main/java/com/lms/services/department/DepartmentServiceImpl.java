@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.lms.dtos.dept.AddDepartmentRequest;
@@ -14,7 +15,10 @@ import com.lms.entities.mainentities.Department;
 import com.lms.entities.mainentities.Teacher;
 import com.lms.exceptions.CustomException;
 import com.lms.message.SuccessMessage;
+import com.lms.pagination.Pagination;
+import com.lms.pagination.PaginationUtil;
 import com.lms.repositories.DepartmentRepository;
+import com.lms.utils.PageableData;
 
 import lombok.RequiredArgsConstructor;
 
@@ -57,13 +61,21 @@ public class DepartmentServiceImpl implements DepartmentService {
 		return new SuccessMessage("Department with id " + deptId + " is updated succesfully!");
 	}
 
+//	@Override
+//	public List<AddDepartmentRequest> getAllDepartments() {
+//		List<Department> depts = departmentRepository.findAll();
+//		if (depts == null) {
+//			throw new CustomException("DS003", "There are no teachers!");
+//		}
+//		return depts.stream().map((s) -> modelMapper.map(s, AddDepartmentRequest.class)).collect(Collectors.toList());
+//	}
+	
 	@Override
-	public List<AddDepartmentRequest> getAllDepartments() {
-		List<Department> depts = departmentRepository.findAll();
-		if (depts == null) {
-			throw new CustomException("DS003", "There are no teachers!");
-		}
-		return depts.stream().map((s) -> modelMapper.map(s, AddDepartmentRequest.class)).collect(Collectors.toList());
+	public PageableData<List<AddDepartmentRequest>> getAllDepartments(Pagination pagination) {
+		Page<AddDepartmentRequest> departmentsPage = this.departmentRepository
+				.getAllDepartments(PaginationUtil.performPagination(pagination));
+		return new PageableData<>(departmentsPage.getContent(), departmentsPage.getTotalPages(),
+				departmentsPage.getTotalElements(), pagination.getPageNo());
 	}
 
 	@Override
@@ -71,6 +83,12 @@ public class DepartmentServiceImpl implements DepartmentService {
 		Department dept = this.departmentRepository.findById(deptId)
 				.orElseThrow(() -> new CustomException("DS004", "Invalid id of department!"));
 		return modelMapper.map(dept, AddDepartmentRequest.class);
+	}
+
+	@Override
+	public Department findByDepartmentName(String name) {
+		Department dept=this.departmentRepository.findByName(name).orElseThrow(()->new CustomException("DS005","Invalid name of department!"));
+		return dept ;
 	}
 
 }

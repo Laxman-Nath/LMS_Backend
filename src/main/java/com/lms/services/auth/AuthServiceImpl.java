@@ -43,7 +43,11 @@ public class AuthServiceImpl implements AuthService {
 			throw new AccessDeniedException(exception.getMessage());
 		}
 		String token = tokenService.generateToken(authentication);
-		return new AuthenticationSuccessMessage("You have successfully logged in", token);
+//		String userName = (String) authentication.getPrincipal();
+//		System.out.println("Username:" + userName);
+		AuthenticationSuccessUser user = getAuthenticatedUser();
+		System.out.println("User name is:" + user.getFirstName());
+		return new AuthenticationSuccessMessage("You have successfully logged in", token, user.getRoleName());
 	}
 
 	@Override
@@ -52,6 +56,7 @@ public class AuthServiceImpl implements AuthService {
 		if (emailString == null) {
 			throw new CustomException("AS001", "No user is authenticated till now!");
 		}
+		System.out.println("Username is :" + emailString);
 		AuthenticationSuccessUser authUser = new AuthenticationSuccessUser();
 		Optional<Librarian> librarian = librarianRepository.findByEmail(emailString);
 		Optional<Student> student = studentRepository.findByEmail(emailString);

@@ -14,8 +14,10 @@ import com.lms.constants.Paths;
 import com.lms.dtos.dept.AddDepartmentRequest;
 import com.lms.dtos.teacher.AddTeacherRequest;
 import com.lms.message.SuccessMessage;
+import com.lms.pagination.Pagination;
 import com.lms.services.department.DepartmentService;
 import com.lms.services.teacher.TeacherService;
+import com.lms.utils.PageableData;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -38,17 +40,18 @@ public class DepartmentController {
 	}
 
 	@GetMapping(Paths.VIEW_ALL_DEPTS)
-	public List<AddDepartmentRequest> getAllDepartments() {
-		return this.deptService.getAllDepartments();
+	public PageableData<List<AddDepartmentRequest>> getAllDepartments(Pagination pagination) {
+		return this.deptService.getAllDepartments(pagination);
 	}
 
 	@DeleteMapping(Paths.DELETE_DEPT)
-	public SuccessMessage deleteDepartment(@RequestParam Long deptId) {
-		return this.deptService.deleteDepartment(deptId);
+	public SuccessMessage deleteDepartment(@RequestParam Long departmentId) {
+		return this.deptService.deleteDepartment(departmentId);
 	}
 
 	@PutMapping(Paths.UPDATE_DEPT)
-	public SuccessMessage updateDepartment(@RequestBody AddDepartmentRequest dept, @RequestParam Long deptId) {
-		return this.deptService.updateDepartment(deptId, dept);
+	public SuccessMessage updateDepartment(@RequestBody AddDepartmentRequest dept, @RequestParam Long departmentId) {
+		System.out.println("inside update method of controller:"+departmentId);
+		return this.deptService.updateDepartment(departmentId, dept);
 	}
 }

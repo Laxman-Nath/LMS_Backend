@@ -59,6 +59,7 @@ public class SecurityConfig {
 				.authorizeHttpRequests(
 						auth -> auth.requestMatchers("/lms/login").permitAll().requestMatchers("/lms/librarian/**")
 								.hasRole("LIBRARIAN").requestMatchers("/lms/user/**").hasAnyRole("STUDENT", "TEACHER")
+								
 								.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
 //				.requestMatchers("/lms/librarian/addbook").hasAuthority("ADD_BOOK")  // Authority check
