@@ -8,8 +8,10 @@ import com.lms.message.SuccessMessage;
 import com.lms.pagination.Pagination;
 import com.lms.utils.PageableData;
 
+import jakarta.mail.MessagingException;
+
 public interface StudentService {
-	SuccessMessage addStudent(AddStudentRequest student);
+	SuccessMessage addStudent(AddStudentRequest student) throws MessagingException;
 
 	SuccessMessage deleteStudent(Long studentId);
 

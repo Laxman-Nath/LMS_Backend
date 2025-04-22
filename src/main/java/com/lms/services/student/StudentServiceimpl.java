@@ -22,8 +22,11 @@ import com.lms.repositories.RoleRepository;
 import com.lms.repositories.StudentRepository;
 import com.lms.services.department.DepartmentService;
 import com.lms.services.role.RoleService;
+import com.lms.utils.MailUtils;
 import com.lms.utils.PageableData;
+import com.lms.utils.PasswordGenerator;
 
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -34,22 +37,39 @@ public class StudentServiceimpl implements StudentService {
 	private final PasswordEncoder passwordEncoder;
 	private final RoleService roleService;
 	private final DepartmentService departmentService;
+	private final MailUtils mailUtils;
+	private final PasswordGenerator passwordGenerator;
 
 	@Override
 	public SuccessMessage addStudent(AddStudentRequest student) {
-		Role role = this.roleService.getRoleById(4l);
+		Role role = this.roleService.getRoleById(4L);
+
 		if (studentRepository.findByRollNo(student.getRollNo()) != null) {
-			throw new CustomException("AS001", "Customer with this roll no already exists!");
+			throw new CustomException("AS001", "Student with this roll no already exists!");
 		}
+
 		Student s = modelMapper.map(student, Student.class);
-		Department department=departmentService.findByDepartmentName(student.getDepartmentName());
-		s.setDepartment(department);
+		Department dept = departmentService.findByDepartmentName(student.getDepartmentName());
+
+		String rawPwd = passwordGenerator.generateRandomPassword();
+		s.setPassword(passwordEncoder.encode(rawPwd));
+		System.out.println("Random password generated is:"+rawPwd);
+		s.setDepartment(dept);
 		s.setRole(role);
-		s.setPassword(passwordEncoder.encode(s.getPassword()));
 		s.setIsEnable(true);
 		s.setAddedDate(LocalDate.now());
-		this.studentRepository.save(s);
-		return new SuccessMessage("Student is added succesfully!");
+
+		studentRepository.save(s);
+
+		try {
+			mailUtils.sendWelcomeEmail(s.getFirstName() + " " + s.getLastName(), rawPwd, s.getEmail());
+		} catch (MessagingException ex) {
+
+			throw new CustomException("EMAIL001",
+					"Failed to send welcome email to " + s.getEmail() + ": " + ex.getMessage());
+		}
+
+		return new SuccessMessage("Student is added successfully!");
 	}
 
 	@Override
@@ -90,7 +110,7 @@ public class StudentServiceimpl implements StudentService {
 		if (student.getGender() != null) {
 			s.setGender(student.getGender());
 		}
-		if(student.getProfileImage()!=null) {
+		if (student.getProfileImage() != null) {
 			s.setProfileImage(student.getProfileImage());
 		}
 		s.setUpdatedDate(LocalDate.now());

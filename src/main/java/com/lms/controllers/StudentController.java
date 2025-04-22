@@ -18,6 +18,7 @@ import com.lms.services.student.StudentService;
 import com.lms.utils.PageableData;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,7 +30,7 @@ public class StudentController {
 	private final StudentService studentService;
 
 	@PostMapping(Paths.ADD_STUDENT)
-	public SuccessMessage addStudent(@RequestBody AddStudentRequest student) {
+	public SuccessMessage addStudent(@RequestBody AddStudentRequest student) throws MessagingException {
 		log.info("Year {}",student.getYear());
 		return this.studentService.addStudent(student);
 	}
