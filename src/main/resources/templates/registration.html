@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Welcome Email</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .email-container {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .header {
+      background-color: #0073e6;
+      color: #ffffff;
+      padding: 20px;
+      text-align: center;
+    }
+    .body {
+      color: #333333;
+      font-size: 16px;
+      line-height: 1.5;
+      padding: 20px;
+    }
+    .footer {
+      text-align: center;
+      color: #777777;
+      font-size: 12px;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <table role="presentation">
+    <tr>
+      <td align="center">
+        <div class="email-container">
+          <div class="header">
+            <h1>Welcome to SNSC</h1>
+          </div>
+
+          <!-- Body -->
+          <div class="body">
+            <p>Hi <strong th:text="${name}">User Name</strong>,</p>
+            <p>Thank you for registering. Below are your login credentials:</p>
+
+            <table role="presentation">
+              <tr>
+                <td><strong>Email:</strong></td>
+                <td th:text="${email}">email@example.com</td>
+              </tr>
+              <tr>
+                <td><strong>Password:</strong></td>
+                <td th:text="${password}"></td>
+              </tr>
+            </table>
+
+            <p>To login, click the link below:</p>
+            <p><a href="http://example.com/login">Login Now</a></p>
+          </div>
+
+          <!-- Footer -->
+          <div class="footer">
+            <p>&copy; 2025 SNSC. All rights reserved.</p>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

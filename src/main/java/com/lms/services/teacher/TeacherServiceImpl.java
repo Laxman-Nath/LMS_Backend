@@ -24,8 +24,11 @@ import com.lms.pagination.PaginationUtil;
 import com.lms.repositories.TeacherRepository;
 import com.lms.services.department.DepartmentService;
 import com.lms.services.role.RoleService;
+import com.lms.utils.MailUtils;
 import com.lms.utils.PageableData;
+import com.lms.utils.PasswordGenerator;
 
+import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -36,18 +39,27 @@ public class TeacherServiceImpl implements TeacherService {
 	private final PasswordEncoder passwordEncoder;
 	private final RoleService roleService;
 	private final DepartmentService departmentService;
-
+    private final PasswordGenerator passwordGenerator;
+    private final MailUtils mailUtils;
 	@Override
 	public SuccessMessage addTeacher(AddTeacherRequest teacher) {
 		Teacher t = modelMapper.map(teacher, Teacher.class);
 		Role role = roleService.getRoleById(3l);
 		Department department=departmentService.findByDepartmentName(teacher.getDepartmentName());
+		String rawPwd = passwordGenerator.generateRandomPassword();
 		t.setDepartment(department);
-		t.setPassword(passwordEncoder.encode(t.getPassword()));
+		t.setPassword(passwordEncoder.encode(rawPwd));
 		t.setRole(role);
 		t.setIsEnable(true);
 		t.setAddedDate(LocalDate.now());
 		this.teacherRepository.save(t);
+		try {
+			mailUtils.sendWelcomeEmail(t.getFirstName() + " " + t.getLastName(), rawPwd, t.getEmail());
+		} catch (MessagingException ex) {
+
+			throw new CustomException("EMAIL001",
+					"Failed to send welcome email to " + t.getEmail() + ": " + ex.getMessage());
+		}
 		return new SuccessMessage("Teacher is added succesfully!");
 	}
 

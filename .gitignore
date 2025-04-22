@@ -33,6 +33,8 @@ build/
 .vscode/
 
 # Sensitive files
-application.properties
-certs/
+src/main/resources/application.properties
+src/main/resources/certs/**
+
+
 
