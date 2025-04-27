@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -40,5 +41,10 @@ public class Book {
 //	private Student student;
 	@OneToMany(mappedBy = "book")
 	private List<BorrowedBook> borrowedBooks = new ArrayList<>();
+	@ManyToOne
+	@JoinColumn(name = "department_id")
+	private Department department;
+	private String year;
+	private String semester;
 
 }

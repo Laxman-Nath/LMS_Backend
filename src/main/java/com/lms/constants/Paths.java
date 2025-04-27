@@ -47,4 +47,7 @@ public class Paths {
 	// get authenticated user
 	public static final String GET_AUTHENTICATED_USER=BASE_URL+"/getauthenticateduser";
 	
+	//get books related to authenticated user
+	public static final String GET_BOOKS_OF_AUTHENTICATED_USER=BASE_URL+"/profile/books";
+	
 }
