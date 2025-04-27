@@ -18,4 +18,7 @@ public interface BookService {
 	PageableData<List<AddBookRequest>> getAllBooks(Pagination pagination);
 
 	AddBookRequest getBookById(Long bookId);
+	
+	PageableData<List<AddBookRequest>> getAllBooksOfAuthenticatedUser(Pagination pagination);
+	
 }

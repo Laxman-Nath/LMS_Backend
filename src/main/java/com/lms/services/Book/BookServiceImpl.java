@@ -8,13 +8,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.lms.dtos.auth.AuthenticationSuccessUser;
 import com.lms.dtos.book.AddBookRequest;
+import com.lms.dtos.student.AddStudentRequest;
 import com.lms.entities.mainentities.Book;
+import com.lms.entities.mainentities.Student;
+import com.lms.entities.mainentities.Teacher;
 import com.lms.exceptions.CustomException;
 import com.lms.message.SuccessMessage;
 import com.lms.pagination.Pagination;
 import com.lms.pagination.PaginationUtil;
 import com.lms.repositories.BookRepository;
+import com.lms.services.auth.AuthService;
+import com.lms.services.student.StudentService;
+import com.lms.services.teacher.TeacherService;
 import com.lms.utils.PageableData;
 
 import lombok.RequiredArgsConstructor;
@@ -24,6 +31,9 @@ import lombok.RequiredArgsConstructor;
 public class BookServiceImpl implements BookService {
 	private final BookRepository bookRepository;
 	private final ModelMapper modelMapper;
+	private final AuthService authService;
+	private final StudentService studentService;
+	private final TeacherService teacherService;
 
 	@Override
 	public SuccessMessage addBook(AddBookRequest book) {
@@ -90,6 +100,34 @@ public class BookServiceImpl implements BookService {
 				.orElseThrow(() -> new CustomException("GB001", "Invalid id of book!"));
 		return modelMapper.map(book, AddBookRequest.class);
 
+	}
+
+	@Override
+	public PageableData<List<AddBookRequest>> getAllBooksOfAuthenticatedUser(Pagination pagination) {
+		AuthenticationSuccessUser authenticationSuccessUser= authService.getAuthenticatedUser();
+		if(authenticationSuccessUser==null) {
+			throw new CustomException("GB002","No user is authenticated !");
+		}
+		Pageable pageable = PaginationUtil.performPagination(pagination);
+		Page<AddBookRequest> booksPage=null;
+		
+		if(authenticationSuccessUser.getRoleName().equalsIgnoreCase("ROLE_STUDENT")) {
+			Student student=studentService.findByEmail(authenticationSuccessUser.getEmail());
+			if(student.getDepartment().getName().toLowerCase()=="csit" || student.getDepartment().getName().toLowerCase()=="bit")
+			{
+			  booksPage=bookRepository.findByYearAndSemester(student.getYear(), student.getSemester(), pageable, student.getDepartment().getId());	
+			}
+			else {
+				 booksPage=bookRepository.findByYear(student.getYear(), pageable, student.getDepartment().getId());	
+			}
+		}
+		else {
+			Teacher teacher=teacherService.findByEmail(authenticationSuccessUser.getEmail());
+			booksPage=bookRepository.findByDepartmentId(teacher.getDepartment().getId(), pageable);
+			
+		}
+		return new PageableData<>(booksPage.getContent(), booksPage.getTotalPages(),  booksPage.getTotalElements(),
+				pagination.getPageNo());
 	}
 
 }

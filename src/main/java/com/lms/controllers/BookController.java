@@ -46,12 +46,12 @@ public class BookController {
 	}
 
 	@GetMapping(Paths.VIEW_ALL_BOOKS)
-	public PageableData<List<AddBookRequest>> getAllBooks( Pagination pagination) {
+	public PageableData<List<AddBookRequest>> getAllBooks(Pagination pagination) {
 //	public List<AddBookRequest> getAllBooks(Pagination pagination) {
 //		bookService.getAllBooks(pagination).forEach(b -> {
 //			System.out.println("Image: " + b.getBookImage());
 //		});
-		
+
 //		System.out.println(bookService.getBookById(1254l).getBookImage());
 		return bookService.getAllBooks(pagination);
 	}
@@ -59,6 +59,12 @@ public class BookController {
 	@GetMapping(Paths.VIEW_BOOK_BY_ID)
 	public AddBookRequest getBookById(@RequestParam Long bookId) {
 		return this.bookService.getBookById(bookId);
+	}
+
+	@GetMapping(Paths.GET_BOOKS_OF_AUTHENTICATED_USER)
+	public PageableData<List<AddBookRequest>> getAllBooksOfAuthenticatedUser(@RequestBody Pagination pagination) {
+		System.out.println("Pagination:"+pagination);
+		return this.bookService.getAllBooksOfAuthenticatedUser(pagination);
 	}
 
 }

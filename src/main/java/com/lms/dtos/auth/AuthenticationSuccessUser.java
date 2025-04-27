@@ -8,4 +8,5 @@ public class AuthenticationSuccessUser {
 	private String lastName;
 	private String gender;
 	private String roleName;
+	private String email;
 }

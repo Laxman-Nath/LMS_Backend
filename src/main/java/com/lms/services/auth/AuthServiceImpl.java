@@ -67,16 +67,19 @@ public class AuthServiceImpl implements AuthService {
 			authUser.setLastName(librarian.get().getLastName());
 			authUser.setGender(librarian.get().getGender());
 			authUser.setRoleName(librarian.get().getRole().getName());
+			authUser.setEmail(librarian.get().getEmail());
 		} else if (student.isPresent()) {
 			authUser.setFirstName(student.get().getFirstName());
 			authUser.setLastName(student.get().getLastName());
 			authUser.setGender(student.get().getGender());
 			authUser.setRoleName(student.get().getRole().getName());
+			authUser.setEmail(student.get().getEmail());
 		} else if (teacher.isPresent()) {
 			authUser.setFirstName(teacher.get().getFirstName());
 			authUser.setLastName(teacher.get().getLastName());
 			authUser.setGender(teacher.get().getGender());
 			authUser.setRoleName(teacher.get().getRole().getName());
+			authUser.setEmail(teacher.get().getEmail());
 		} else {
 			throw new CustomException("AS002", "No user found with this email!");
 		}
