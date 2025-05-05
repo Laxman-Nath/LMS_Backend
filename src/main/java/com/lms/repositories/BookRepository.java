@@ -23,4 +23,13 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 	@Query("SELECT new com.lms.dtos.book.AddBookRequest(b.id,b.title,b.quantity,b.authorName,b.ISBN,b.publishedDate,b.bookImage) FROM Book b WHERE year=:year AND semester=:semester AND b.department.id=:departmentId")
 	Page<AddBookRequest> findByYearAndSemester(@Param("year") String year, @Param("semester") String semester,
 			Pageable pageable,@Param("departmentId") Long departmentId);
+	@Query("SELECT new com.lms.dtos.book.AddBookRequest(b.id, b.title, b.quantity, b.authorName, b.ISBN, b.publishedDate, b.bookImage) " +
+		       "FROM Book b WHERE b.year = :year AND b.department.name = :departmentName " +
+		       "AND (b.semester = :semester OR :semester IS NULL OR :semester = '')")
+		Page<AddBookRequest> findByDepartmentYearAndSemester(@Param("departmentName") String departmentName,
+		                                                     @Param("year") String year,
+		                                                     @Param("semester") String semester,
+		                                                     Pageable pageable);
+
+	
 }

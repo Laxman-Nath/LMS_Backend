@@ -1,7 +1,9 @@
 package com.lms.controllers;
 
+import org.hibernate.grammars.hql.HqlParser.NthSideClauseContext;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -65,6 +67,12 @@ public class BookController {
 	public PageableData<List<AddBookRequest>> getAllBooksOfAuthenticatedUser(@RequestBody Pagination pagination) {
 		System.out.println("Pagination:"+pagination);
 		return this.bookService.getAllBooksOfAuthenticatedUser(pagination);
+	}
+	
+	@GetMapping(Paths.GET_BOOKS_BY_FILTER)
+	public PageableData<List<AddBookRequest>> getBooksByFilters(@PathVariable String departmentName,@PathVariable String year,@PathVariable(required = false) String semester,@RequestBody Pagination pagination){
+		System.out.println("Dept name:"+departmentName+","+semester+","+year);
+		return this.bookService.getBooksByFilter(pagination, departmentName, year, semester);
 	}
 
 }

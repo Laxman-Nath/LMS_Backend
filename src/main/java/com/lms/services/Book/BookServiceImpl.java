@@ -130,4 +130,19 @@ public class BookServiceImpl implements BookService {
 				pagination.getPageNo());
 	}
 
+	@Override
+	public PageableData<List<AddBookRequest>> getBooksByFilter(Pagination pagination,String departmentName,String year,String semester) {
+		
+		Pageable pageable = PaginationUtil.performPagination(pagination);
+		if ("null".equals(semester)) {
+			 System.out.println("Inside if");
+		        semester = null;  
+		    }
+		Page<AddBookRequest> booksPage = this.bookRepository.findByDepartmentYearAndSemester(departmentName, year, semester, pageable);
+		 
+//		return booksPage.toList();
+		return new PageableData<>(booksPage.getContent(), booksPage.getTotalPages(),  booksPage.getTotalElements(),
+				pagination.getPageNo());
+	}
+
 }

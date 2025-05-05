@@ -21,4 +21,6 @@ public interface BookService {
 	
 	PageableData<List<AddBookRequest>> getAllBooksOfAuthenticatedUser(Pagination pagination);
 	
+	PageableData<List<AddBookRequest>> getBooksByFilter(Pagination pagination,String departmentName,String year,String semester);
+	
 }
