@@ -47,7 +47,7 @@ public class AuthServiceImpl implements AuthService {
 //		System.out.println("Username:" + userName);
 		AuthenticationSuccessUser user = getAuthenticatedUser();
 		System.out.println("User name is:" + user.getFirstName());
-		return new AuthenticationSuccessMessage("You have successfully logged in", token, user.getRoleName());
+		return new AuthenticationSuccessMessage("You have successfully logged in", token);
 	}
 
 	@Override

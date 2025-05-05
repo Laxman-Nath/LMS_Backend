@@ -7,7 +7,6 @@ public class Paths {
 	// book
 
 	public static final String ADD_BOOK = BASE_URL + LIBRARIAN + "/addbook";
-	public static final String VIEW_ALL_BOOKS = BASE_URL + LIBRARIAN + "/getallbooks";
 	public static final String VIEW_BOOK_BY_ID = BASE_URL + LIBRARIAN + "/getbookbyid";
 	public static final String UPDATE_BOOK = BASE_URL + LIBRARIAN + "/updatebook";
 	public static final String DELETE_BOOK = BASE_URL + LIBRARIAN + "/deletebook";
@@ -49,5 +48,12 @@ public class Paths {
 	
 	//get books related to authenticated user
 	public static final String GET_BOOKS_OF_AUTHENTICATED_USER=BASE_URL+"/profile/books";
+	
+	// get all books
+	public static final String VIEW_ALL_BOOKS = BASE_URL +  "/getallbooks";
+	
+	// get books by filter
+	public static final String GET_BOOKS_BY_FILTER = BASE_URL +  "/getbooksbyfilter/{departmentName}/{year}/{semester}";
+	
 	
 }
