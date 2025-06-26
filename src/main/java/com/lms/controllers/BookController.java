@@ -38,8 +38,8 @@ public class BookController {
 	}
 
 	@DeleteMapping(Paths.DELETE_BOOK)
-	public SuccessMessage deleteBook(@RequestParam Long bookId) {
-		return bookService.deleteBook(bookId);
+	public SuccessMessage deleteBook(@RequestParam Long id) {
+		return bookService.deleteBook(id);
 	}
 
 	@PutMapping(Paths.UPDATE_BOOK)

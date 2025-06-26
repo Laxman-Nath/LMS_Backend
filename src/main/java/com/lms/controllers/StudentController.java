@@ -48,8 +48,8 @@ public class StudentController {
 	}
 
 	@DeleteMapping(Paths.DELETE_STUDENT)
-	public SuccessMessage deleteStudent(@RequestParam Long studentId) {
-		return this.studentService.deleteStudent(studentId);
+	public SuccessMessage deleteStudent(@RequestParam Long id) {
+		return this.studentService.deleteStudent(id);
 	}
 
 	@PutMapping(Paths.UPDATE_STUDENT)

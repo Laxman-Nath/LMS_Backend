@@ -45,8 +45,8 @@ public class DepartmentController {
 	}
 
 	@DeleteMapping(Paths.DELETE_DEPT)
-	public SuccessMessage deleteDepartment(@RequestParam Long departmentId) {
-		return this.deptService.deleteDepartment(departmentId);
+	public SuccessMessage deleteDepartment(@RequestParam Long id) {
+		return this.deptService.deleteDepartment(id);
 	}
 
 	@PutMapping(Paths.UPDATE_DEPT)

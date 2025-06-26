@@ -34,8 +34,8 @@ public class TeacherController {
 	}
 
 	@GetMapping(Paths.VIEW_TEACHER_BY_ID)
-	public AddTeacherRequest getTeacherById(@RequestParam Long teacherId) {
-		return this.teacherService.getTeacherById(teacherId);
+	public AddTeacherRequest getTeacherById(@RequestParam Long id) {
+		return this.teacherService.getTeacherById(id);
 	}
 
 	@GetMapping(Paths.VIEW_ALL_TEACHERS)
