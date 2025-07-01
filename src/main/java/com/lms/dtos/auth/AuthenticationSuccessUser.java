@@ -9,4 +9,6 @@ public class AuthenticationSuccessUser {
 	private String gender;
 	private String roleName;
 	private String email;
+	private String profileImage;
+	private String Address;
 }

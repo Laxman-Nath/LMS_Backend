@@ -68,6 +68,8 @@ public class AuthServiceImpl implements AuthService {
 			authUser.setGender(librarian.get().getGender());
 			authUser.setRoleName(librarian.get().getRole().getName());
 			authUser.setEmail(librarian.get().getEmail());
+			authUser.setProfileImage(librarian.get().getProfileImage());
+			authUser.setAddress(librarian.get().getAddress());
 		} else if (student.isPresent()) {
 			authUser.setFirstName(student.get().getFirstName());
 			authUser.setLastName(student.get().getLastName());
