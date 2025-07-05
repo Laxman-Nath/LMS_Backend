@@ -1,6 +1,12 @@
 package com.lms.config;
 
 import com.lms.config.RsaKeyConverter;
+
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -16,21 +22,24 @@ import com.nimbusds.jose.jwk.RSAKey;
 @TestConfiguration
 public class TestSecurityConfig {
 
-    @Value("${test.public.key}")
-    private String publicKey;
-
-    @Value("${test.private.key}")
-    private String privateKey;
-
     @Bean
     @Primary
-    public JwtEncoder jwtEncoder() {
-        RSAKey rsaKey = new RSAKey.Builder(RsaKeyConverter.getPublicKeyFromString(publicKey))
-                .privateKey(RsaKeyConverter.getPrivateKeyFromString(privateKey))
-                .keyID("test-key")
+    public JwtEncoder jwtEncoder() throws Exception {
+        // Generate a new RSA key pair (2048 bits)
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        keyPairGenerator.initialize(2048);
+        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+
+        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+        RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+
+        RSAKey rsaKey = new RSAKey.Builder(publicKey)
+                .privateKey(privateKey)
+                .keyID("test-generated-key")
                 .build();
 
         JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(rsaKey));
         return new NimbusJwtEncoder(jwkSource);
     }
+
 }
