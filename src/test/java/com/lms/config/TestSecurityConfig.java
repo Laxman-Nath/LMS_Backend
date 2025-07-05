@@ -1,5 +1,7 @@
 package com.lms.config;
 
+import com.lms.config.RsaKeyConverter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
@@ -11,22 +13,20 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.nimbusds.jose.jwk.RSAKey;
 
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-
 @TestConfiguration
 public class TestSecurityConfig {
 
+    @Value("${test.public.key}")
+    private String publicKey;
+
+    @Value("${test.private.key}")
+    private String privateKey;
+
     @Bean
     @Primary
-    public JwtEncoder jwtEncoder() throws Exception {
-        // Generate a dummy RSA key pair for testing
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        keyPairGenerator.initialize(2048);
-        KeyPair keyPair = keyPairGenerator.generateKeyPair();
-
-        RSAKey rsaKey = new RSAKey.Builder((java.security.interfaces.RSAPublicKey) keyPair.getPublic())
-                .privateKey(keyPair.getPrivate())
+    public JwtEncoder jwtEncoder() {
+        RSAKey rsaKey = new RSAKey.Builder(RsaKeyConverter.getPublicKeyFromString(publicKey))
+                .privateKey(RsaKeyConverter.getPrivateKeyFromString(privateKey))
                 .keyID("test-key")
                 .build();
 

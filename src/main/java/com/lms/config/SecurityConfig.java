@@ -15,17 +15,15 @@ import com.nimbusds.jose.proc.SecurityContext;
 
 import lombok.RequiredArgsConstructor;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -33,8 +31,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -84,13 +80,14 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	JwtDecoder jwtDecoder() {
-		return NimbusJwtDecoder.withPublicKey(jwtConfigProperties.publicKey()).build();
+	JwtDecoder jwtDecoder() throws IOException {
+		return NimbusJwtDecoder.withPublicKey(RsaKeyConverter.getPublicKeyFromString(jwtConfigProperties.getPublicKeyContent())).build();
 	}
 
 	@Bean
-	JwtEncoder jwtEncoder() {
-		JWK jwk = new RSAKey.Builder(jwtConfigProperties.publicKey()).privateKey(jwtConfigProperties.privateKey())
+	JwtEncoder jwtEncoder() throws IOException {
+		System.out.println("public key:"+jwtConfigProperties.getPublicKeyContent()+" private key :"+jwtConfigProperties.getPrivateKeyContent());
+		JWK jwk = new RSAKey.Builder(RsaKeyConverter.getPublicKeyFromString(jwtConfigProperties.getPublicKeyContent())).privateKey(RsaKeyConverter.getPrivateKeyFromString(jwtConfigProperties.getPrivateKeyContent()))
 				.build();
 		JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
 		return new NimbusJwtEncoder(jwks);
