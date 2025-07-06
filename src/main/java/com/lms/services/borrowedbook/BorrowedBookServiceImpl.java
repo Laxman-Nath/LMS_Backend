@@ -48,7 +48,7 @@ public class BorrowedBookServiceImpl implements BorrowedBookService {
 			throw new CustomException("BB001", "Unauthorized!");
 		}
 
-		Book book = bookRepository.findById(bookId).orElseThrow(()-> new CustomException("BB001", "Invalid book!"));
+		Book book = bookRepository.findById(bookId).orElseThrow(() -> new CustomException("BB001", "Invalid book!"));
 		if (book == null) {
 			throw new CustomException("BB002", "Book not found!");
 		}
@@ -63,7 +63,7 @@ public class BorrowedBookServiceImpl implements BorrowedBookService {
 			} else {
 				log.info("Inside teacher not null else part................");
 				BorrowedBook borrowedBook = createBorrowedBookForTeacher(teacher, book);
-
+				borrowedBookRepository.save(borrowedBook);
 			}
 		} else if (student != null) {
 			log.info("Inside student not null................");
@@ -76,7 +76,7 @@ public class BorrowedBookServiceImpl implements BorrowedBookService {
 			} else {
 				log.info("Inside student not null else part................");
 				BorrowedBook borrowedBook = createBorrowedBookForStudent(student, book);
-//				borrowedBookRepository.save(borrowedBook);
+				borrowedBookRepository.save(borrowedBook);
 			}
 		} else {
 			throw new CustomException("BB009", "User is neither a teacher nor a student!");
@@ -86,7 +86,7 @@ public class BorrowedBookServiceImpl implements BorrowedBookService {
 	}
 
 	private BorrowedBook createBorrowedBookForTeacher(Teacher teacher, Book book) {
-//		log.info("Inside teacher................");
+		// log.info("Inside teacher................");
 		BorrowedBook borrowedBook = new BorrowedBook();
 		borrowedBook.setBorrowedDate(LocalDate.now());
 		borrowedBook.setRenewalDate(LocalDate.now().plusDays(15));

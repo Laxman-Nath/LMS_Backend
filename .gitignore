@@ -34,6 +34,7 @@ build/
 
 # Sensitive files
 src/main/resources/application-development.properties
+src/main/resources/application.properties
 src/main/resources/certs/**
 
 

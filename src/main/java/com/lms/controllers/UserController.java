@@ -14,13 +14,14 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name="UserAPI",description = "API for managing crud operations related to users")
+@Tag(name = "UserAPI", description = "API for managing crud operations related to users")
 public class UserController {
 	private final BorrowedBookService borrowedBookService;
 
 	@PostMapping(Paths.BORROW_BOOK)
 	public SuccessMessage borrowBook(@RequestParam Long bookId) {
 		{
+			System.out.println("Inside borrowed book:"+bookId);
 			return this.borrowedBookService.borrowBook(bookId);
 		}
 
