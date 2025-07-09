@@ -35,9 +35,9 @@ public interface BorrowedBookRepository extends JpaRepository<BorrowedBook, Long
 	@Query("SELECT b FROM BorrowedBook b WHERE b.renewalDate < CURRENT_DATE")
 	List<BorrowedBook> getAllRenewalFailedBooks();
 
-	@Query("SELECT new  com.lms.dtos.book.BorrowedBookResponse(b.book.title,b.student.fineAmount,b.borrowedDate,b.renewalDate) FROM BorrowedBook b WHERE b.student=:student AND b.returnedDate IS NULL")
+	@Query("SELECT new  com.lms.dtos.book.BorrowedBookResponse(b.book.id,b.book.title,b.student.fineAmount,b.borrowedDate,b.renewalDate) FROM BorrowedBook b WHERE b.student=:student AND b.returnedDate IS NULL")
 	List<BorrowedBookResponse> getBorrowedBookOfStudentByStudent(@Param("student") Student student);
 
-	@Query("SELECT new  com.lms.dtos.book.BorrowedBookResponse(b.book.title,b.teacher.fineAmount,b.borrowedDate,b.renewalDate) FROM BorrowedBook b WHERE b.teacher=:teacher AND  b.returnedDate IS NULL")
+	@Query("SELECT new  com.lms.dtos.book.BorrowedBookResponse(b.book.id,b.book.title,b.teacher.fineAmount,b.borrowedDate,b.renewalDate) FROM BorrowedBook b WHERE b.teacher=:teacher AND  b.returnedDate IS NULL")
 	List<BorrowedBookResponse> getBorrowedBookOfTeacherByTeacher(@Param("teacher") Teacher teacher);
 }

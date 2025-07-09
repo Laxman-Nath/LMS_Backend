@@ -41,7 +41,7 @@ public class Paths {
 	// borrow or return book
 	public static final String BORROW_BOOK=BASE_URL+USER+"/borrowbook";
 	public static final String RETURN_BOOK=BASE_URL+USER+"/returnbook";
-	public static final String GET_ALL_BOOKS_OF_AUTH_USER=BASE_URL+USER+"/getAllBooks";
+	public static final String GET_ALL_BOOKS_OF_AUTH_USER=BASE_URL+USER+"/getAllBorrowedBooks";
 	
 	// get authenticated user
 	public static final String GET_AUTHENTICATED_USER=BASE_URL+"/getauthenticateduser";
