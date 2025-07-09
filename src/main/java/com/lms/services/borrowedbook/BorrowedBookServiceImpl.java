@@ -1,11 +1,13 @@
 package com.lms.services.borrowedbook;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.lms.auth.AuthenticationHandler;
+import com.lms.dtos.book.BorrowedBookResponse;
 import com.lms.entities.mainentities.Book;
 import com.lms.entities.mainentities.BorrowedBook;
 import com.lms.entities.mainentities.Student;
@@ -58,7 +60,7 @@ public class BorrowedBookServiceImpl implements BorrowedBookService {
 
 		if (teacher != null) {
 			log.info("Inside teacher not null................");
-			if (borrowedBookRepository.getBorrowedBookOfTeacher(teacher, book) != null) {
+			if (borrowedBookRepository.getBorrowedBookOfTeacherByTeacherAndBook(teacher, book) != null) {
 				throw new CustomException("BB005", "You have already taken this book!");
 			} else {
 				log.info("Inside teacher not null else part................");
@@ -71,7 +73,7 @@ public class BorrowedBookServiceImpl implements BorrowedBookService {
 				throw new CustomException("BB006", "Your fine is not paid yet!");
 			} else if (borrowedBookRepository.countTotalBooksOfStudent(student) >= 3) {
 				throw new CustomException("BB007", "You have already taken 3 books!");
-			} else if (borrowedBookRepository.getBorrowedBookOfStudent(student, book) != null) {
+			} else if (borrowedBookRepository.getBorrowedBookOfStudentByStudentAndBook(student, book) != null) {
 				throw new CustomException("BB008", "You have already taken this book!");
 			} else {
 				log.info("Inside student not null else part................");
@@ -135,7 +137,7 @@ public class BorrowedBookServiceImpl implements BorrowedBookService {
 		if (teacher != null) {
 			// Handle teacher-specific return logic
 
-			BorrowedBook borrowedBook = borrowedBookRepository.getBorrowedBookOfTeacher(teacher, book);
+			BorrowedBook borrowedBook = borrowedBookRepository.getBorrowedBookOfTeacherByTeacherAndBook(teacher, book);
 			if (borrowedBook != null) {
 				borrowedBook.setReturnedDate(LocalDate.now());
 				borrowedBookRepository.save(borrowedBook);
@@ -148,7 +150,7 @@ public class BorrowedBookServiceImpl implements BorrowedBookService {
 				throw new CustomException("BB0013",
 						"Your fine is not paid yet! Please contact the library and return the book there.");
 			} else {
-				BorrowedBook borrowedBook = borrowedBookRepository.getBorrowedBookOfStudent(student, book);
+				BorrowedBook borrowedBook = borrowedBookRepository.getBorrowedBookOfStudentByStudentAndBook(student, book);
 				if (borrowedBook != null) {
 					borrowedBook.setReturnedDate(LocalDate.now());
 					borrowedBookRepository.save(borrowedBook);
@@ -161,6 +163,20 @@ public class BorrowedBookServiceImpl implements BorrowedBookService {
 		}
 
 		return new SuccessMessage("Book was returned successfully!");
+	}
+
+	@Override
+	public List<BorrowedBookResponse> getBorrrowedBooksOfAuthUser() {
+		String userName = authenticationHandler.getAuthenticatedUserName();
+		if (userName == null) {
+			throw new CustomException("BB001", "Unauthorized!");
+		}
+
+		Teacher teacher = teacherService.findByEmail(userName);
+		Student student = studentService.findByEmail(userName);
+		
+		return teacher!=null?this.borrowedBookRepository.getBorrowedBookOfTeacherByTeacher(teacher):this.borrowedBookRepository.getBorrowedBookOfStudentByStudent(student);
+
 	}
 
 }

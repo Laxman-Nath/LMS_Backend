@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lms.entities.supportingentities.Role;
 
 import jakarta.persistence.*;
@@ -37,6 +38,7 @@ public class Teacher {
 	private String password;
 	private String confirmPassword;
 	@OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference
 	private List<BorrowedBook> borrowedBooks = new ArrayList<>();
 
 }

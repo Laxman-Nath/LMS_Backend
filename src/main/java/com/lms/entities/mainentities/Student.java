@@ -7,6 +7,7 @@ import java.util.List;
 import org.hibernate.annotations.ManyToAny;
 import org.hibernate.validator.constraints.UniqueElements;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lms.entities.supportingentities.Role;
 
 import jakarta.persistence.CascadeType;
@@ -57,6 +58,7 @@ public class Student  {
     private Double fineAmount; 
 
 	@OneToMany(mappedBy = "student",cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference
 	private List<BorrowedBook> borrowedBooks=new ArrayList<>();
 
 }

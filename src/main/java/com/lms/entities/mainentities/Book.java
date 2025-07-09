@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,6 +42,7 @@ public class Book {
 //	@JoinColumn(name = "student_id")
 //	private Student student;
 	@OneToMany(mappedBy = "book")
+	@JsonManagedReference
 	private List<BorrowedBook> borrowedBooks = new ArrayList<>();
 	@ManyToOne
 	@JoinColumn(name = "department_id")
