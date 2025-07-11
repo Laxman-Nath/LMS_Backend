@@ -37,7 +37,7 @@ public class Teacher {
 	private Role role;
 	private String password;
 	private String confirmPassword;
-	@OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "teacher",  orphanRemoval = true)
 	@JsonManagedReference
 	private List<BorrowedBook> borrowedBooks = new ArrayList<>();
 

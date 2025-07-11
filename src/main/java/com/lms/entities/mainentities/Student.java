@@ -57,7 +57,7 @@ public class Student  {
 	private String confirmPassword;
     private Double fineAmount; 
 
-	@OneToMany(mappedBy = "student",cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "student", orphanRemoval = true)
 	@JsonManagedReference
 	private List<BorrowedBook> borrowedBooks=new ArrayList<>();
 
