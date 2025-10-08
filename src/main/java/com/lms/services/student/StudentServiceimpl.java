@@ -3,9 +3,9 @@ package com.lms.services.student;
 import java.time.LocalDate;
 import java.util.List;
 
-import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,11 +18,10 @@ import com.lms.exceptions.CustomException;
 import com.lms.message.SuccessMessage;
 import com.lms.pagination.Pagination;
 import com.lms.pagination.PaginationUtil;
-import com.lms.repositories.RoleRepository;
 import com.lms.repositories.StudentRepository;
+import com.lms.services.QueueService.EmailProducer;
 import com.lms.services.department.DepartmentService;
 import com.lms.services.role.RoleService;
-import com.lms.utils.MailUtils;
 import com.lms.utils.PageableData;
 import com.lms.utils.PasswordGenerator;
 
@@ -30,15 +29,22 @@ import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
+// @RequiredArgsConstructor
 public class StudentServiceimpl implements StudentService {
-	private final StudentRepository studentRepository;
-	private final ModelMapper modelMapper;
-	private final PasswordEncoder passwordEncoder;
-	private final RoleService roleService;
-	private final DepartmentService departmentService;
-	private final MailUtils mailUtils;
-	private final PasswordGenerator passwordGenerator;
+	@Autowired
+	private StudentRepository studentRepository;
+	@Autowired
+	private ModelMapper modelMapper;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private RoleService roleService;
+	@Autowired
+	private DepartmentService departmentService;
+	@Autowired
+	private PasswordGenerator passwordGenerator;
+	@Autowired
+	private @Lazy EmailProducer emailProducer;
 
 	@Override
 	public SuccessMessage addStudent(AddStudentRequest student) {
@@ -53,7 +59,7 @@ public class StudentServiceimpl implements StudentService {
 
 		String rawPwd = passwordGenerator.generateRandomPassword();
 		s.setPassword(passwordEncoder.encode(rawPwd));
-		System.out.println("Random password generated is:"+rawPwd);
+		System.out.println("Random password generated is:" + rawPwd);
 		s.setDepartment(dept);
 		s.setRole(role);
 		s.setIsEnable(true);
@@ -62,11 +68,12 @@ public class StudentServiceimpl implements StudentService {
 		studentRepository.save(s);
 
 		try {
-			mailUtils.sendWelcomeEmail(s.getFirstName() + " " + s.getLastName(), rawPwd, s.getEmail());
+		emailProducer.sendWelcomeEmail(s.getFirstName() + " " + s.getLastName(),
+		rawPwd, s.getEmail());
 		} catch (MessagingException ex) {
 
-			throw new CustomException("EMAIL001",
-					"Failed to send welcome email to " + s.getEmail() + ": " + ex.getMessage());
+		throw new CustomException("EMAIL001",
+		"Failed to send welcome email to " + s.getEmail() + ": " + ex.getMessage());
 		}
 
 		return new SuccessMessage("Student is added successfully!");
@@ -84,7 +91,7 @@ public class StudentServiceimpl implements StudentService {
 
 	@Override
 	public SuccessMessage updateStudent(Long studentId, AddStudentRequest student) {
-//		Student oldStudent = modelMapper.map(student, Student.class);
+		// Student oldStudent = modelMapper.map(student, Student.class);
 		Student s = this.studentRepository.findById(studentId)
 				.orElseThrow(() -> new CustomException("US001", "Invalid id of student"));
 		if (student.getFirstName() != null)

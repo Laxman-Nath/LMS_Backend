@@ -40,7 +40,7 @@ public class TeacherServiceImpl implements TeacherService {
 	private final RoleService roleService;
 	private final DepartmentService departmentService;
     private final PasswordGenerator passwordGenerator;
-    private final MailUtils mailUtils;
+    // private final MailUtils mailUtils;
 	@Override
 	public SuccessMessage addTeacher(AddTeacherRequest teacher) {
 		Teacher t = modelMapper.map(teacher, Teacher.class);
@@ -53,13 +53,13 @@ public class TeacherServiceImpl implements TeacherService {
 		t.setIsEnable(true);
 		t.setAddedDate(LocalDate.now());
 		this.teacherRepository.save(t);
-		try {
-			mailUtils.sendWelcomeEmail(t.getFirstName() + " " + t.getLastName(), rawPwd, t.getEmail());
-		} catch (MessagingException ex) {
+		// try {
+		// 	// mailUtils.sendWelcomeEmail(t.getFirstName() + " " + t.getLastName(), rawPwd, t.getEmail());
+		// } catch (MessagingException ex) {
 
-			throw new CustomException("EMAIL001",
-					"Failed to send welcome email to " + t.getEmail() + ": " + ex.getMessage());
-		}
+		// 	throw new CustomException("EMAIL001",
+		// 			"Failed to send welcome email to " + t.getEmail() + ": " + ex.getMessage());
+		// }
 		return new SuccessMessage("Teacher is added succesfully!");
 	}
 
